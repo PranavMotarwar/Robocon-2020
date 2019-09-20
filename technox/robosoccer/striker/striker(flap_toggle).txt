@@ -1,0 +1,403 @@
+
+int fr_in1 = 29;
+int fr_in2 =33;
+int fr_pwm =2;
+
+int fl_in1 = 9;
+int fl_in2 = 8;
+int fl_pwm = 6;
+
+int bl_in1 = 37;
+int bl_in2 = 41;
+int bl_pwm = 7;
+
+int br_in1 = 4;
+int br_in2 =3;
+int br_pwm = 5;
+
+int flap_in1 = 49;
+int flap_in2 = 45;
+int flap_pwm = 12;
+
+
+
+
+
+
+void setup() {
+  // put your setup code here, to run once:
+ 
+pinMode(fr_in1,OUTPUT);
+pinMode(fr_in2,OUTPUT);
+pinMode(fr_pwm,OUTPUT);
+pinMode(fl_in1,OUTPUT);
+pinMode(fl_in2,OUTPUT);
+pinMode(fl_pwm,OUTPUT);
+pinMode(br_in1,OUTPUT);
+pinMode(br_in2,OUTPUT);
+pinMode(br_pwm,OUTPUT);
+pinMode(bl_in1,OUTPUT);
+pinMode(bl_in2,OUTPUT);
+pinMode(bl_pwm,OUTPUT);
+pinMode(flap_in1,OUTPUT);
+pinMode(flap_in2,OUTPUT);
+pinMode(flap_pwm,OUTPUT);
+
+Serial.begin(115200);
+
+//
+//// rack 
+//pinMode(rack_dir,OUTPUT);
+//pinMode(rack_pwm,OUTPUT);
+
+}
+
+void Speed(int val1,int val2,int val3,int val4){
+  analogWrite(fl_pwm,val1);
+  analogWrite(fr_pwm,val2);
+  analogWrite(bl_pwm,val3);
+  analogWrite(br_pwm,val4);
+}
+
+
+void Stop(){
+  analogWrite(fl_pwm,0);
+  analogWrite(fr_pwm,0);
+  analogWrite(bl_pwm,0);
+  analogWrite(br_pwm,0);
+}
+
+// all the fucking variables 
+int hat_up,hat_down,hat_left,hat_right,up,down,left,right,start,back,front_left,front_right,left_x,left_y,right_x,right_y,lt1,rt1,left_x_dir,left_y_dir,right_x_dir,right_y_dir;
+int Y,A,B,X,rotate_left,rotate_right;
+
+void Digitest(){
+  if(hat_up == 1){
+  // digitalWrite(fl_pwm,HIGH);
+  Forward();
+Speed(100, 100,100,100);
+  }
+  else if(hat_up == 0){
+  Stop();}
+  //digitalWrite(fl_pwm,LOW);
+   if(hat_down == 1){
+   //digitalWrite(fr_pwm,HIGH);
+   Backward();
+   Speed(100,100,100,100);
+   }
+  if(hat_down == 0){
+  Stop();}
+  //digitalWrite(fr_pwm,LOW);
+
+    if(hat_left == 1){
+   //digitalWrite(bl_pwm,HIGH);
+   Left();
+   Speed(100,100,100,100);
+    }
+  if(hat_left == 0){
+  Stop();}
+  //digitalWrite(bl_pwm,LOW);
+
+  if(hat_right == 1){
+   //digitalWrite(br_pwm,HIGH);
+   Right();
+   Speed(100,100,100,100);}
+ if(hat_right == 0){
+  Stop();}
+  //digitalWrite(br_pwm,LOW);
+}
+
+int range_map(int s){
+   int val = s - '0';
+   if(0<=val && val<= 6 ){
+    return map(val,0,6,0,200);
+   }
+   else{
+    return map(val,7,9,205,255);
+   }
+}
+
+  
+
+  void Forward(){
+     digitalWrite(fr_in1,LOW);
+    digitalWrite(fr_in2,HIGH);
+    
+    digitalWrite(bl_in1,HIGH);
+    digitalWrite(bl_in2,LOW);
+
+    digitalWrite(fl_in1,HIGH);
+    digitalWrite(fl_in2,LOW);
+    
+    digitalWrite(br_in1,HIGH);
+    digitalWrite(br_in2,LOW);
+
+//     analogWrite(fl_pwm,200);
+//    analogWrite(br_pwm,200);
+//    analogWrite(fr_pwm,200);
+//    analogWrite(bl_pwm,200);
+    }
+void Backward(){
+    digitalWrite(fr_in1,HIGH);  //change reverse
+    digitalWrite(fr_in2,LOW);
+    
+    digitalWrite(bl_in1,LOW);
+    digitalWrite(bl_in2,HIGH);
+
+    digitalWrite(fl_in1,LOW);
+    digitalWrite(fl_in2,HIGH);
+    
+    digitalWrite(br_in1,LOW);
+    digitalWrite(br_in2,HIGH);
+
+//     analogWrite(fl_pwm,200);
+//    analogWrite(br_pwm,200);
+//    analogWrite(fr_pwm,200);
+//    analogWrite(bl_pwm,200);
+    }
+
+ void Right(){
+    digitalWrite(fr_in1,HIGH);   // reverse
+    digitalWrite(fr_in2,LOW);
+    
+    digitalWrite(bl_in1,HIGH);
+    digitalWrite(bl_in2,LOW);
+
+    digitalWrite(fl_in1,HIGH);
+    digitalWrite(fl_in2,LOW);
+    
+    digitalWrite(br_in1,LOW);
+    digitalWrite(br_in2,HIGH);
+
+//     analogWrite(fl_pwm,200);
+//    analogWrite(br_pwm,200);
+//    analogWrite(fr_pwm,200);
+//    analogWrite(bl_pwm,200);
+ }
+
+ void Left(){
+  digitalWrite(fr_in1,LOW);
+    digitalWrite(fr_in2,HIGH);
+    
+    digitalWrite(bl_in1,LOW);
+    digitalWrite(bl_in2,HIGH);
+
+    digitalWrite(fl_in1,LOW);
+    digitalWrite(fl_in2,HIGH);
+    
+    digitalWrite(br_in1,HIGH);
+    digitalWrite(br_in2,LOW);
+
+//     analogWrite(fl_pwm,200);
+//    analogWrite(br_pwm,200);
+//    analogWrite(fr_pwm,200);
+//    analogWrite(bl_pwm,200);
+    
+ }
+
+void ClockWise(){
+    digitalWrite(fl_in1,LOW);
+    digitalWrite(fl_in2,HIGH);
+    digitalWrite(fr_in1,HIGH);
+    digitalWrite(fr_in2,LOW); 
+    digitalWrite(bl_in1,LOW);
+    digitalWrite(bl_in2,HIGH);
+    digitalWrite(br_in1,HIGH);
+    digitalWrite(br_in2,LOW);
+    Speed(180,180,180,180);
+}
+
+void AntiClockWise(){    
+    digitalWrite(fl_in1,HIGH);
+    digitalWrite(fl_in2,LOW);
+    digitalWrite(fr_in1,LOW);
+    digitalWrite(fr_in2,HIGH); 
+    digitalWrite(bl_in1,HIGH);
+    digitalWrite(bl_in2,LOW);
+    digitalWrite(br_in1,LOW);
+    digitalWrite(br_in2,HIGH);
+    Speed(180,180,180,180);
+}
+
+void Flap(){
+    digitalWrite(flap_in1,HIGH);
+    digitalWrite(flap_in2,LOW);
+    analogWrite(flap_pwm,240);
+}
+
+
+void loop() {
+  // put your main code here, to run repeatedly:
+//Flap();
+  // MAGIC FUNCTION 
+  
+int s[22];
+  int i=0;
+  while(1){
+  if(Serial.available()){
+  s[i] = Serial.read(); 
+//  Serial.print(s[i]);
+  if(s[i]==110){
+    i=-1;
+  }
+  i++;
+  if(i==0){
+    break;
+  }
+  if(i>=22){
+    i=0;
+    break;
+  }
+
+  }
+  }
+  // all the buttons 
+  hat_up = s[0] - '0';
+  hat_down = s[1] - '0';
+  hat_left = s[2] - '0';
+  hat_right = s[3] - '0';
+  Y = s[4] - '0';
+  A = s[5] - '0';
+  X = s[6] - '0';
+  B = s[7] - '0';
+  front_right = s[8] - '0';
+  front_left = s[9] - '0';
+  up = s[10] - '0';
+  //front_right = s[11] - '0';
+int  f1 = s[12] - '0';
+  int f2 = s[13] -'0';
+  left_x_dir = s[18] - '0';
+  left_y_dir = s[19] - '0';
+  right_x_dir = s[20] - '0';
+  right_y_dir = s[21] - '0';
+
+  
+ // all the axis 
+
+// ALL THY MOVEMENT LOGIC .....
+//if(!((A==1) || (B==0) || (X==0) || (Y==0)|| (rotate_left==0) || (rotate_right==0)))
+//{
+//  
+//  analogWrite(fl_pwm,0);
+//  analogWrite(fr_pwm,0);
+//  analogWrite(bl_pwm,0);
+//  analogWrite(br_pwm,0);
+//  
+//}
+//if(Y ==1){
+//  Forward();
+////  delay(100);
+////  Stop();
+//}
+//
+//if(A ==1){
+//  Backward();
+////  delay(100);
+//}
+//
+//if(B ==1){
+//  Right();
+////  delay(1000);
+//}
+//
+//if(X ==1){
+//  Left();
+////  delay(1000);
+//}
+//
+//if(rotate_left==1){
+//  AntiClockWise();
+// // delay(10);
+//}
+//
+//
+//if(rotate_right==1){
+//  ClockWise();
+  //delay(10);
+//}
+//
+//if(hat_up ==1){
+//  Stop();
+//  delay(100);
+//}
+//else
+//Stop();
+// ALL THY MOVEMENT LOGIC .....
+if (A== 1)
+{
+  Flap();
+}
+if (Y== 1)
+{
+  analogWrite(flap_pwm,0);
+}
+if((left_x_dir==1) && (left_y_dir==1) && (right_x_dir==1) && (right_y_dir==1))
+{
+  
+  analogWrite(fl_pwm,0);
+  analogWrite(fr_pwm,0);
+  analogWrite(bl_pwm,0);
+  analogWrite(br_pwm,0);
+  
+}
+if((right_x_dir == 0)&& (right_y_dir ==1)){
+  Left();
+  
+  int val_fl = range_map(s[14]);//map((s[16]-'0'),0,9,0,217);
+  int val_fr = range_map(s[14]);//map((s[16]-'0'),0,9,0,229);
+  int val_bl = range_map(s[14]);//map((s[16]-'0'),0,9,0,255);
+  int val_br = range_map(s[14]);//map((s[16]-'0'),0,9,0,235);
+  Speed(val_fl,val_fr,val_bl,val_br);
+//  Speed(100,100,100,100);
+  }
+if((left_y_dir == 0)&&(left_x_dir == 1) ){
+  //SideWayRight();
+  Forward();
+  int val_fl = range_map(s[13]);//map((s[13]-'0'),0,9,0,217);
+  int val_fr = range_map(s[13]);//map((s[13]-'0'),0,9,0,229);
+  int val_bl = range_map(s[13]);//map((s[13]-'0'),0,9,0,255);
+  int val_br = range_map(s[13]);//map((s[13]-'0'),0,9,0,235);
+
+  Speed(val_fl,val_fr,val_bl,val_br);
+}
+
+if((left_y_dir == 2)&&(left_x_dir == 1) ){                        //(left_y_dir == 2)&&(left_x_dir == 1)
+  //Forward();
+  Backward();
+  int val_fl = range_map(s[13]);//map((s[13]-'0'),0,9,0,217);
+  int val_fr = range_map(s[13]);//map((s[13]-'0'),0,9,0,229);
+  int val_bl = range_map(s[13]);//map((s[13]-'0'),0,9,0,255);
+  int val_br = range_map(s[13]);//map((s[13]-'0'),0,9,0,235);
+
+  Speed(val_fl,val_fr,val_bl,val_br);
+}
+
+if((right_x_dir == 2)&&(right_y_dir == 1)){      ///(right_x_dir == 2)&&(right_y_dir == 1)
+  Right();
+  int val_fl = range_map(s[14]);//map((s[17]-'0'),0,9,0,217);
+  int val_fr = range_map(s[14]);//map((s[17]-'0'),0,9,0,229);
+  int val_bl = range_map(s[14]);//map((s[17]-'0'),0,9,0,255);
+  int val_br = range_map(s[14]);//map((s[17]-'0'),0,9,0,235);
+  Speed(val_fl,val_fr,val_bl,val_br);
+
+// Speed(150,150,150,150);
+}
+
+
+if(B==1){      ///(right_x_dir == 2)&&(right_y_dir == 1)
+  Right();
+  Speed(150,150,150,150);
+// Speed(150,150,150,150);
+}
+
+
+
+
+
+
+if(X==1){      ///(right_x_dir == 2)&&(right_y_dir == 1)
+  Left();
+  Speed(150,150,150,150);
+// Speed(150,150,150,150);
+}
+}

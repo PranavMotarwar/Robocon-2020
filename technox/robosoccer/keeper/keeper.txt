@@ -1,0 +1,182 @@
+#include <SmartElexPs2Shield.h>
+
+SmartElexPs2Shield ps(0,1);   // Rx of Arduino    //  Tx of Arduino
+
+uint8_t i=0;
+
+int in1 = 10;
+int in2 =12;
+int pwm1 =9;
+
+
+int in11 =4;
+int in22 =5;
+int pwm2 =11;
+
+void setup() 
+{
+pinMode(in1,OUTPUT);
+pinMode(in2,OUTPUT);
+pinMode(pwm1,OUTPUT);
+pinMode(in11,OUTPUT);
+pinMode(in22,OUTPUT);
+pinMode(pwm2,OUTPUT);
+  ps.begin(115200);
+  Serial.begin(115200);
+  Serial.println("Initializing");
+  delay(1000);
+  ps.SetController(ps.DigitalMode); //Fixed digital mode
+  delay(20);
+  ps.ReadControllerButtons();
+  delay(300);
+  Stop();
+}
+void Stop(){
+  analogWrite(pwm1,0);
+  analogWrite(pwm2,0);
+}
+
+void Speed(int val1,int val2){
+  
+  analogWrite(pwm1,val1);
+  analogWrite(pwm2,val2);
+}
+
+    
+
+  void left(){
+    digitalWrite(in1,LOW);
+    digitalWrite(in2,HIGH);
+        
+    digitalWrite(in11,HIGH);
+    digitalWrite(in22,LOW);
+    Speed(150,150);
+    }
+void right(){
+    digitalWrite(in1,HIGH);
+    digitalWrite(in2,LOW);
+    
+    digitalWrite(in11,LOW);
+    digitalWrite(in22,HIGH);
+    Speed(150,150);
+    }
+  void left1(){
+    digitalWrite(in1,LOW);
+    digitalWrite(in2,HIGH);
+        
+    digitalWrite(in11,HIGH);
+    digitalWrite(in22,LOW);
+    Speed(170,200);
+    }
+void right1(){
+    digitalWrite(in1,HIGH);
+    digitalWrite(in2,LOW);
+    
+    digitalWrite(in11,LOW);
+    digitalWrite(in22,HIGH);
+    Speed(170,200);
+    }
+void turnR(){
+  
+    digitalWrite(in1,HIGH);
+    digitalWrite(in2,LOW);
+    
+    digitalWrite(in11,HIGH);
+    digitalWrite(in22,LOW);
+    Speed(125,125);
+  
+}
+void shimmy()
+{
+  
+    digitalWrite(in1,HIGH);
+    digitalWrite(in2,LOW);
+    
+    digitalWrite(in11,LOW);
+    digitalWrite(in22,HIGH);
+    Speed(80,250);
+    delay(500);
+    
+    digitalWrite(in1,LOW);
+    digitalWrite(in2,HIGH);
+    
+    digitalWrite(in11,HIGH);
+    digitalWrite(in22,LOW);
+    Speed(80,250);
+    delay(500);
+}
+
+void turnL(){
+  
+    digitalWrite(in1,LOW);
+    digitalWrite(in2,HIGH);
+    
+    digitalWrite(in11,LOW);
+    digitalWrite(in22,HIGH);
+    Speed(125,125);
+  
+}
+
+
+
+void loop() {
+  // put your main code here, to run repeatedly:
+ps.ReadControllerButtons();//assigns new values to all predef variables
+
+
+if (ps.TRIANGLE==0)
+{
+  shimmy();
+}
+else if(ps.SQUARE==0){
+  left();
+  
+  delay(5);
+}
+
+else if(ps.CIRCLE==0){
+  right();
+  Serial.print("sWl");
+}
+else if(ps.LEFT==0){
+  left1();
+  
+  
+  delay(5);
+}
+
+else if(ps.RIGHT==0){
+  right1();
+}
+else if(ps.LEFT==0){
+  left();
+  
+  Serial.print("SWR");
+  delay(5);
+}
+
+else if(ps.L1==0){
+  turnL();
+  Serial.print("sWl");
+  
+    
+  delay(5);
+}
+
+else if(ps.R1==0){
+  turnR();
+  Serial.print("sWl");
+  
+    
+  delay(5);
+}
+
+  
+  else
+  Stop();
+
+ 
+ delay(20);
+    
+    
+}

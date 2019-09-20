@@ -1,0 +1,92 @@
+const int rdd=9;
+const int rd=10;
+
+const int lms=6;
+const int ld=8;
+const int ldd=7;
+const int rms=11;        
+const int jp=3;   //5 of lsa
+const int jp1=4;   //4 of lsa
+
+int lasterror=0;
+int error=0;
+const int basespeed=240;
+const int maxspeed=245;
+const int minspeed=0;
+const double kp=21.0;                   //23
+const double kd=8.0;                       //6
+const double Ki=0;
+int rightms=0;
+int leftms=0;
+double motorspeed=0;
+int result;
+
+void setup() {
+  pinMode(rd,OUTPUT);
+  pinMode(rdd,OUTPUT);
+  pinMode(rms,OUTPUT);
+  pinMode(ld,OUTPUT);
+  pinMode(ldd,OUTPUT);
+  pinMode(lms,OUTPUT);
+//  pinMode(jp,INPUT);
+//  pinMode(se,OUTPUT);
+  Serial.begin(115200);
+  pinMode(13,OUTPUT);
+  digitalWrite(13,HIGH);
+  digitalWrite(rdd,LOW);
+  digitalWrite(rd,HIGH);
+  digitalWrite(ld,HIGH);
+  digitalWrite(ldd,LOW);
+  //analogWrite(lms,200);
+ // digitalWrite(se,LOW);
+}
+
+void loop()
+{
+  if(Serial.available())
+  {
+    int a=Serial.read();
+    //Serial.println(a);
+    if(a<=70)
+    {
+      error=a-35;
+      motorspeed=kp*error+kd*(error-lasterror);
+      lasterror=error;
+      rightms=basespeed-motorspeed;
+      leftms=basespeed+motorspeed;
+      if(rightms>maxspeed)
+        rightms=maxspeed;
+      if(leftms>maxspeed)
+        leftms=maxspeed;
+      if(leftms<minspeed)
+        leftms=minspeed;
+      if(rightms<minspeed)
+        rightms=minspeed;
+      if(error==35)
+      {
+        digitalWrite(rd,LOW);
+        digitalWrite(rdd,HIGH);
+        digitalWrite(ld,HIGH);
+        digitalWrite(ldd,LOW);
+        rightms=50;
+      }
+      else if(error==-35)
+      {
+        digitalWrite(rdd,LOW);
+        digitalWrite(rd,HIGH);
+        digitalWrite(ldd,HIGH);
+        digitalWrite(ld,LOW);
+        leftms=50;
+      }
+      else
+      {
+        digitalWrite(rdd,LOW);
+        digitalWrite(rd,HIGH);
+        digitalWrite(ld,HIGH);
+        digitalWrite(ldd,LOW);
+      }
+      analogWrite(lms, leftms);
+      analogWrite(rms, rightms);
+    }
+  }
+}

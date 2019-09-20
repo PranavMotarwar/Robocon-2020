@@ -1,0 +1,225 @@
+/*     CODE UPDATED ON 15/09/2019    */
+
+#include <Cytron_PS2Shield.h>
+#include <SoftwareSerial.h>
+
+Cytron_PS2Shield ps2(2,3);
+
+
+//DECLARING PINS---------------------------------------
+
+const int m1p = 5;
+const int m1d = 4;
+const int m2p = 6;
+const int m2d = 7;
+const int m3d = 9;
+const int m3p = 10;
+const int m4d = 12;
+const int m4p = 11;
+
+//SETTING PINS------------------------------------------
+
+void setup()
+{
+  ps2.begin(9600);
+  Serial.begin(9600);
+  pinMode(m1p,OUTPUT);
+  pinMode(m1d,OUTPUT);
+  pinMode(m2p,OUTPUT);
+  pinMode(m2d,OUTPUT);
+  pinMode(m3p,OUTPUT);
+  pinMode(m3d,OUTPUT);
+  pinMode(m4p,OUTPUT);
+  pinMode(m4d,OUTPUT);  
+}
+
+//FUNCTION DECLARATIONS------------------------
+void forward(){
+  digitalWrite(m1d,LOW);
+  analogWrite(m1p,100);
+  digitalWrite(m2d,HIGH);
+  analogWrite(m2p,100);
+  digitalWrite(m3p,HIGH);
+  analogWrite(m3d,100);
+  digitalWrite(m4d,HIGH);
+  analogWrite(m4p,108);
+
+}
+void jump(){
+  digitalWrite(m1d,LOW);
+  analogWrite(m1p,180);
+  digitalWrite(m2d,HIGH);
+  analogWrite(m2p,100);
+  digitalWrite(m3p,HIGH);
+  analogWrite(m3d,180);
+  digitalWrite(m4d,HIGH);
+  analogWrite(m4p,108);
+
+}
+void fastforward(){
+  digitalWrite(m1d,LOW);
+  analogWrite(m1p,200);
+  digitalWrite(m2d,HIGH);
+  analogWrite(m2p,200);
+  digitalWrite(m3p,HIGH);
+  analogWrite(m3d,200);
+  digitalWrite(m4d,HIGH);
+  analogWrite(m4p,205);
+  
+  
+}
+void backward(){
+  digitalWrite(m1d,HIGH);
+  analogWrite(m1p,100);
+  digitalWrite(m2d,LOW);
+  analogWrite(m2p,100);
+  digitalWrite(m3p,LOW);
+  analogWrite(m3d,100);
+  digitalWrite(m4d,LOW);
+  analogWrite(m4p,100);
+  
+  
+}
+void fastbackward(){
+  digitalWrite(m1d,HIGH);
+  analogWrite(m1p,200);
+  digitalWrite(m2d,LOW);
+  analogWrite(m2p,200);
+  digitalWrite(m3p,LOW);
+  analogWrite(m3d,200);
+  digitalWrite(m4d,LOW);
+  analogWrite(m4p,205);
+    
+}
+void tiltright(){
+  digitalWrite(m1d,LOW);
+  analogWrite(m1p,70);
+  digitalWrite(m2d,HIGH);
+  analogWrite(m2p,180);
+  digitalWrite(m3p,HIGH);
+  analogWrite(m3d,180);
+  digitalWrite(m4d,HIGH);
+  analogWrite(m4p,70);
+    
+}
+void tiltleft(){
+  digitalWrite(m1d,LOW);
+  analogWrite(m1p,180);
+  digitalWrite(m2d,HIGH);
+  analogWrite(m2p,70);
+  digitalWrite(m3p,HIGH);
+  analogWrite(m3d,70);
+  digitalWrite(m4d,HIGH);
+  analogWrite(m4p,180);
+    
+}
+
+void right(){
+  digitalWrite(m1d,LOW);
+  analogWrite(m1p,100);
+  digitalWrite(m2d,LOW);
+  analogWrite(m2p,100);
+  digitalWrite(m3p,LOW);
+  analogWrite(m3d,100);
+  digitalWrite(m4d,HIGH);
+  analogWrite(m4p,100);
+  
+  
+}
+void left(){
+  digitalWrite(m1d,HIGH);
+  analogWrite(m1p,100);
+  digitalWrite(m2d,HIGH);
+  analogWrite(m2p,100);
+  digitalWrite(m3p,HIGH);
+  analogWrite(m3d,100);
+  digitalWrite(m4d,LOW);
+  analogWrite(m4p,100);
+  
+  
+}
+void halt(){
+  digitalWrite(m1d,HIGH);
+  analogWrite(m1p,0);
+  digitalWrite(m2d,HIGH);
+  analogWrite(m2p,0);
+  digitalWrite(m3p,HIGH);
+  analogWrite(m3d,0);
+  digitalWrite(m4d,LOW);
+  analogWrite(m4p,0);
+}
+
+//DEFINING MOVEMENTS-------------------------------------------------------------------------------------------------------
+void loop()
+{
+  //Serial.print(ps2.readButton(PS2_SQUARE)+100);
+  //Serial.print(ps2.readButton(PS2_CROSS));
+  Serial.print("X Axis val: ");
+  Serial.println(ps2.readButton(PS2_JOYSTICK_LEFT_X_AXIS));
+//fast movements______________________________________________________________________
+  if((ps2.readButton(PS2_DOWN))==0)                           
+  { 
+    fastbackward();
+  }
+ 
+  else if((ps2.readButton(PS2_UP))==0)
+  { 
+    fastforward();                                                  
+  }
+   else if((ps2.readButton(PS2_RIGHT))==0)
+  { 
+    tiltright();                                     
+  }
+  else if((ps2.readButton(PS2_LEFT))==0)
+  { 
+    tiltleft();          
+  }
+//Normal Movements____________________________________________________________________
+  else if((ps2.readButton(PS2_CROSS))==0)
+  {
+    backward();
+    }
+  else if((ps2.readButton(PS2_TRIANGLE))==0)
+  { 
+    forward();                                                  
+  }
+   else if((ps2.readButton(PS2_CIRCLE))==0)
+  { 
+    right();                                                    
+  }
+  else if((ps2.readButton(PS2_SQUARE))==0)
+  { 
+    left();                                                     
+  }
+//Joystick Movements___________________________________________________________________
+  else if((ps2.readButton(PS2_JOYSTICK_LEFT_X_AXIS))==0)
+    { 
+      left();                                                    
+      
+    }
+  else if((ps2.readButton(PS2_JOYSTICK_LEFT_X_AXIS))==255)
+    { 
+      left();                                                    
+      
+    }
+  else if((ps2.readButton(PS2_JOYSTICK_RIGHT_Y_AXIS))==0)
+    { 
+      forward();                                                   
+      
+    }
+  else if((ps2.readButton(PS2_JOYSTICK_RIGHT_Y_AXIS))==255)
+    { 
+      backward();                                                 
+      
+    }
+  /*else if((ps2.readButton(PS2_RIGHT1)==0))
+    { 
+      jump();                                                   
+      
+    }*/
+
+  else
+  { 
+    halt();
+  }
+}

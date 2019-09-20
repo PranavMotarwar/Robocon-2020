@@ -1,0 +1,299 @@
+
+#include SmartElexPs2Shield.h
+
+SmartElexPs2Shield ps(0,1);    Rx of Arduino      Tx of Arduino
+
+uint8_t i=0;
+
+int fr_in1 = 27;
+int fr_in2 =29;
+int fr_pwm =5;
+
+int fl_in1 = 9;
+int fl_in2 = 6;
+int fl_pwm = 11;
+
+int bl_in1 = 4;
+int bl_in2 = 41;
+int bl_pwm = 2;
+
+int br_in1 = 37;
+int br_in2 =35;
+int br_pwm = 8;
+
+int fappin1 =45;
+int fappin2 =13;
+int fappen=12;
+void setup() 
+{
+  pinMode(fappin1,OUTPUT);
+  pinMode(fappin2,OUTPUT);
+  pinMode(fappen,OUTPUT);
+  
+  pinMode(fr_in1,OUTPUT);
+pinMode(fr_in2,OUTPUT);
+pinMode(fr_pwm,OUTPUT);
+pinMode(fl_in1,OUTPUT);
+pinMode(fl_in2,OUTPUT);
+pinMode(fl_pwm,OUTPUT);
+pinMode(br_in1,OUTPUT);
+pinMode(br_in2,OUTPUT);
+pinMode(br_pwm,OUTPUT);
+pinMode(bl_in1,OUTPUT);
+pinMode(bl_in2,OUTPUT);
+pinMode(bl_pwm,OUTPUT);
+  ps.begin(115200);
+  Serial.begin(115200);
+  Serial.println(Initializing);
+  delay(1000);
+  ps.SetController(ps.DigitalMode); Fixed digital mode
+  delay(20);
+  ps.ReadControllerButtons();
+  delay(300);
+  
+}
+void Stop(){
+  analogWrite(fl_pwm,0);
+  analogWrite(fr_pwm,0);
+  analogWrite(bl_pwm,0);
+  analogWrite(br_pwm,0);
+}
+
+void Speed(int val1,int val2,int val3,int val4){
+  analogWrite(fl_pwm,val1);
+  analogWrite(fr_pwm,val2);
+  analogWrite(bl_pwm,val3);
+  analogWrite(br_pwm,val4);
+}
+
+void North_West(int val_north, int val_west){ 
+    digitalWrite(fr_in1,LOW);
+    digitalWrite(fr_in2,HIGH);
+    
+    digitalWrite(bl_in1,HIGH);
+    digitalWrite(bl_in2,LOW);
+
+    digitalWrite(fl_in1,HIGH);
+    digitalWrite(fl_in2,LOW);
+    
+    digitalWrite(br_in1,HIGH);
+    digitalWrite(br_in2,LOW);
+    
+    analogWrite(fl_pwm,0);
+    analogWrite(br_pwm,0);
+    analogWrite(fr_pwm,val_north);
+    analogWrite(bl_pwm,val_west);
+  }
+
+    void North_East(int val_north, int val_east){
+    digitalWrite(fr_in1,HIGH);
+    digitalWrite(fr_in2,LOW);
+    
+    digitalWrite(bl_in1,HIGH);
+    digitalWrite(bl_in2,LOW);
+
+    digitalWrite(fl_in1,HIGH);
+    digitalWrite(fl_in2,LOW);
+    
+    digitalWrite(br_in1,LOW);
+    digitalWrite(br_in2,HIGH);
+    
+    analogWrite(fr_pwm,0);
+    analogWrite(bl_pwm,0);
+    analogWrite(fl_pwm,val_north);
+    analogWrite(br_pwm,val_east);
+  }
+
+    void South_West(int val_north, int val_west){
+    digitalWrite(fr_in1,HIGH);
+    digitalWrite(fr_in2,LOW);
+    
+    digitalWrite(bl_in1,LOW);
+    digitalWrite(bl_in2,HIGH);
+
+    digitalWrite(fl_in1,LOW);
+    digitalWrite(fl_in2,HIGH);
+    
+    digitalWrite(br_in1,HIGH);
+    digitalWrite(br_in2,LOW);
+    
+     analogWrite(fr_pwm,0);
+    analogWrite(bl_pwm,0);
+    analogWrite(fl_pwm,val_north);
+    analogWrite(br_pwm,val_west);
+  }
+
+    void South_East(int val_north, int val_west){
+     digitalWrite(fr_in1,HIGH);
+    digitalWrite(fr_in2,LOW);
+    
+    digitalWrite(bl_in1,LOW);
+    digitalWrite(bl_in2,HIGH);
+
+    digitalWrite(fl_in1,HIGH);
+    digitalWrite(fl_in2,LOW);
+    
+    digitalWrite(br_in1,HIGH);
+    digitalWrite(br_in2,LOW);
+    analogWrite(fl_pwm,0);
+    analogWrite(br_pwm,0);
+    analogWrite(fr_pwm,val_north);
+    analogWrite(bl_pwm,val_west);
+  }
+
+  void Forward(){
+    digitalWrite(fr_in1,HIGH);
+    digitalWrite(fr_in2,LOW);
+    
+    digitalWrite(bl_in1,LOW);
+    digitalWrite(bl_in2,HIGH);
+
+    digitalWrite(fl_in1,LOW);
+    digitalWrite(fl_in2,HIGH);
+    
+    digitalWrite(br_in1,HIGH);
+    digitalWrite(br_in2,LOW);
+    Speed(130,100,100,130);150 100 100 150
+    }
+void Backward(){
+    digitalWrite(fr_in1,LOW);
+    digitalWrite(fr_in2,HIGH);
+    
+    digitalWrite(bl_in1,HIGH);
+    digitalWrite(bl_in2,LOW);
+
+    digitalWrite(fl_in1,HIGH);
+    digitalWrite(fl_in2,LOW);
+    
+    digitalWrite(br_in1,LOW);
+    digitalWrite(br_in2,HIGH);
+    Speed(180,180,180,180);
+    }
+
+ void SideWayRight(){
+    digitalWrite(fl_in1,LOW);
+    digitalWrite(fl_in2,HIGH);
+    digitalWrite(fr_in1,LOW);
+    digitalWrite(fr_in2,HIGH); 
+    digitalWrite(bl_in1,HIGH);
+    digitalWrite(bl_in2,LOW);
+    digitalWrite(br_in1,HIGH);
+    digitalWrite(br_in2,LOW);
+    Speed(180,180,180,180);
+ }
+
+ void SideWayLeft(){
+    digitalWrite(fl_in1,HIGH);
+    digitalWrite(fl_in2,LOW);
+    digitalWrite(fr_in1,HIGH);
+    digitalWrite(fr_in2,LOW); 
+    digitalWrite(bl_in1,LOW);
+    digitalWrite(bl_in2,HIGH);
+    digitalWrite(br_in1,LOW);
+    digitalWrite(br_in2,HIGH);
+    Speed(180,180,180,180);
+ }
+
+void ClockWise(){
+    digitalWrite(fl_in1,LOW);
+    digitalWrite(fl_in2,HIGH);
+    digitalWrite(fr_in1,LOW);
+    digitalWrite(fr_in2,HIGH); 
+    digitalWrite(bl_in1,LOW);
+    digitalWrite(bl_in2,HIGH);
+    digitalWrite(br_in1,LOW);
+    digitalWrite(br_in2,HIGH);
+    Speed(130,130,130,130);
+}
+
+void AntiClockWise(){    
+    digitalWrite(fl_in1,HIGH);
+    digitalWrite(fl_in2,LOW);
+    digitalWrite(fr_in1,HIGH);
+    digitalWrite(fr_in2,LOW); 
+    digitalWrite(bl_in1,HIGH);
+    digitalWrite(bl_in2,LOW);
+    digitalWrite(br_in1,HIGH);
+    digitalWrite(br_in2,LOW);
+    Speed(130,130,130,130);
+}
+
+
+void loop() {
+   put your main code here, to run repeatedly
+ps.ReadControllerButtons();assigns new values to all predef variables
+    digitalWrite(fappin1,LOW);
+    digitalWrite(fappin2,HIGH);
+    digitalWrite(fappen,HIGH);
+if (ps.UP == 0)
+{
+    digitalWrite(fappin1,LOW);
+    digitalWrite(fappin2,HIGH);
+    digitalWrite(fappen,HIGH);     
+}
+if (ps.DOWN==0)
+{
+    digitalWrite(fappin1,LOW);
+    digitalWrite(fappin2,HIGH);
+    digitalWrite(fappen,LOW);
+}
+if(ps.L2==0){0         L2
+  North_West(150,150);
+  Serial.print(NW);
+  delay(5);
+}
+
+else if(ps.R2==0){ 0   R2
+  North_East(150,150);
+  Serial.print(NE);
+  delay(5);
+}
+
+else if(ps.R1==0){0     R1
+  South_East(150,150);
+  Serial.print(SE);
+  delay(5);
+}
+
+else if(ps.L1==0){     L1
+  South_West(150,150);
+  Serial.print(SW);
+  delay(5);
+}
+
+else if(ps.TRIANGLE==0){
+  Forward();
+  Serial.print(FF);
+  delay(5);
+}
+else if(ps.SQUARE==0){
+  SideWayRight();
+    Serial.print(SWR);
+  delay(5);
+}
+else if(ps.CROSS==0){
+  Backward();
+  Serial.print(B);
+  delay(5);
+}
+else if(ps.CIRCLE==0){
+  SideWayLeft();
+  Serial.print(sWl);
+  
+  delay(5);
+}else if(ps.LEFT==0){
+  ClockWise();
+  Serial.print(clock);
+  delay(5);}
+
+  else if(ps.RIGHT==0){
+  AntiClockWise();
+  Serial.print(anticlock);
+  delay(5);
+  }
+  el
+  2se  Stop();
+    Serial.println(ps.TRIANGLE);
+    delay(20);
+    
+}
