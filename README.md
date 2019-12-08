@@ -1,2 +1,2 @@
 # ROBOCON_2020
-Repository for Robocon-2020
+The Official Repository for Codes and Documentation for Robocon-2020
